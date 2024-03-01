@@ -21,11 +21,14 @@ version = list(filter(None, [get_version_via_com(p) for p in paths]))[0] # Get t
 chromeversion=int(version.split(".")[0])
 
 # Scrap the image
-os.chdir('C:\Users\tartempion\Pictures')
+os.chdir(r"C:\Users\tartempion\Pictures")
 url="https://www.mindat.org"
 try:
+    ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
     options = uc.ChromeOptions()
-    #options.add_argument('--headless') # With this line uncommented, Chrome browser should not pop up during the scrapping - however this fails recently
+    options.add_argument("start-maximized")
+    options.add_argument('--headless=new') # With this line uncommented, Chrome browser should not pop - however Cloudflare challenge fails sometimes with this option
+    options.add_argument(f'--user-agent={ua}')
     try:
         driver = uc.Chrome(use_subprocess=True, options=options,version_main=chromeversion)
     except:
@@ -47,7 +50,6 @@ try:
             imgopen_state+=1
         if imgopen_state>10:
             imgopen_state=0 # If too many attemps then give up
-    time.sleep(1)
     
     img.save('photo.png') # Save the image file
 except:
